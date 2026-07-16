@@ -58,8 +58,7 @@ def doctors():
 
 # Post requests
 @app.post("/admission")
-def admission(patient_id: int, doctor_id: int, payment_id: int, medicine_id: int, country_id: str, 
-              admission_date: str, release_date: str, diagnosis: str, urgency_rate: int):
+def admission(patient_id: int, doctor_id: int, payment_id: int, medicine_id: int, country_id: str, admission_date: str, release_date: str, diagnosis: str, urgency_rate: int):
     try:
         cursor = db.cursor() 
         query = "INSERT INTO admissions (patient_id, doctor_id, payment_id, medicine_id, country_id, admission_date, release_date, diagnosis, urgency_rate) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -74,8 +73,7 @@ def admission(patient_id: int, doctor_id: int, payment_id: int, medicine_id: int
         return {"error": f"---->{e}<----"}
 
 @app.post("/patients")
-def patients(patient_id: int, first_name: str, last_name: str, email: str, age: int, 
-             birthday: str, contact_number: int, status: str, temperature: float, laboratory_test: str):
+def patients(patient_id: int, first_name: str, last_name: str, email: str, age: int, birthday: str, contact_number: int, status: str, temperature: float, laboratory_test: str):
     try:
         cursor = db.cursor() 
         query = "INSERT INTO patients (patient_id, first_name, last_name, email, age, birthday, contact_number, status, temperature, laboratory_test) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
