@@ -2,17 +2,18 @@ import requests
 import random
 import time
 from rich import print as show
+from datetime import datetime
 
 def admission_input(patient_id: int, doctor_id: int, payment_id: int, medicine_id: int, country_id: str, 
               admission_date: str, release_date: str, diagnosis: str, urgency_rate: int):
     
-    u = "http://127.0.0.1:8000/admissions"
+    u = "http://127.0.0.1:8000/admission"
     r = requests.post(url=u, params={"patient_id": patient_id, "doctor_id": doctor_id, "payment_id": payment_id, "medicine_id": medicine_id, "country_id": country_id, "admission_date": admission_date, "release_date": release_date, "diagnosis": diagnosis, "urgency_rate": urgency_rate})
     if r.status_code in (200, 201, 202, 204):
-        show(f"[green][{r.status_code}][/green] - {r.text}")
+        show(f"[{datetime.now().strftime("%m/%d/%Y_%H-%M-%S")} [green]{r.status_code}[/green]] - {r.text}")
 
     elif r.status_code in (400, 401, 403, 404, 408, 429):
-        show(f"[red][{r.status_code}][/red] - {r.text}")
+        show(f"[{datetime.now().strftime("%m/%d/%Y_%H-%M-%S")} [red]{r.status_code}[/red]] - {r.text}")
 
 def patients_input(patient_id: int, first_name: str, last_name: str, email: str, age: int, 
              birthday: str, contact_number: int, status: str, temperature: float, laboratory_test: str):
@@ -20,24 +21,24 @@ def patients_input(patient_id: int, first_name: str, last_name: str, email: str,
     u = "http://127.0.0.1:8000/patients"
     r = requests.post(url=u, params={"patient_id": patient_id, "first_name": first_name, "last_name": last_name, "email": email, "age": age, "birthday": birthday, "contact_number": contact_number, "status": status, "temperature": temperature, "laboratory_test": laboratory_test})
     if r.status_code in (200, 201, 202, 204):
-        show(f"[green][{r.status_code}][/green] - {r.text}")
+        show(f"[{datetime.now().strftime("%m/%d/%Y_%H-%M-%S")} [green]{r.status_code}[/green]] - {r.text}")
 
     elif r.status_code in (400, 401, 403, 404, 408, 429):
-        show(f"[red][{r.status_code}][/red] - {r.text}")
+        show(f"[{datetime.now().strftime("%m/%d/%Y_%H-%M-%S")} [red]{r.status_code}[/red]] - {r.text}")
 
 def payment_input(payment_id: int, amount: int, payment_method: str, paid_date: str):
     
     u = "http://127.0.0.1:8000/payment"
     r = requests.post(url=u, params={"payment_id": payment_id, "amount": amount, "payment_method": payment_method, "paid_date": paid_date})
     if r.status_code in (200, 201, 202, 204):
-        show(f"[green][{r.status_code}][/green] - {r.text}")
+        show(f"[{datetime.now().strftime("%m/%d/%Y_%H-%M-%S")} [green]{r.status_code}[/green]] - {r.text}")
 
     elif r.status_code in (400, 401, 403, 404, 408, 429):
-        show(f"[red][{r.status_code}][/red] - {r.text}")
+        show(f"[{datetime.now().strftime("%m/%d/%Y_%H-%M-%S")} [red]{r.status_code}[/red]] - {r.text}")
 
 def insert_data():
     # For admissions
-    first_name_generate = random.choice([
+    first_name_generate = [
     "Aaron", "Abigail", "Adam", "Adrian", "Aiden", "Alan", "Albert", "Alexa", "Alexander", "Alexis",
     "Alice", "Alicia", "Alyssa", "Amanda", "Amber", "Amelia", "Amy", "Andrea", "Andrew", "Angela",
     "Angelica", "Angelina", "Anthony", "Arthur", "Ashley", "Austin", "Ava", "Barbara", "Benjamin", "Bethany",
@@ -76,9 +77,9 @@ def insert_data():
     "Wesley", "Whitney", "Yuri", "Zane", "Alfred", "Anita", "Arnold", "Beatrice", "Bernard", "Clyde",
     "Cynthia", "Douglas", "Edith", "Eugene", "Fiona", "Gloria", "Gordon", "Harriet", "Hector", "Irene",
     "Janice", "Kristopher", "Louise", "Marissa", "Miriam", "Nadine", "Oliver", "Penelope", "Quincy", "Regina",
-    "Roland", "Sheila", "Sonia", "Trisha", "Ulysses", "Vivian", "Wendy", "Xenia", "Yolanda", "Zelda"
-])
-    last_name_generate = random.choice([
+    "Roland", "Sheila", "Sonia", "Trisha", "Ulysses", "Vivian", "Wendy", "Xenia", "Yolanda", "Zelda"]
+
+    last_name_generate = [
     "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez",
     "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin",
     "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson",
@@ -115,13 +116,12 @@ def insert_data():
     "Cannon", "Clayton", "Conner", "Cross", "Doyle", "Fleming", "Garner", "Hurst", "Johnston", "Klein",
     "Lambert", "Manning", "Newton", "Osborne", "Page", "Pope", "Preston", "Sharp", "Sherman", "Slater",
     "Snow", "Underwood", "Vaughn", "Wiggins", "Yates", "Zuniga", "Barrera", "Carrillo", "Escamilla", "Huerta",
-    "Infante", "Miramontes", "Partida", "Rosario", "Sotelo", "Toribio", "Urbina", "Villalobos", "Zepeda", "Arellano"
-])
+    "Infante", "Miramontes", "Partida", "Rosario", "Sotelo", "Toribio", "Urbina", "Villalobos", "Zepeda", "Arellano"]
+
     patient_id_generate = 1
-    doctor_id_generate = random.randint(1, 16)
     payment_id_generate = 1001
-    medicine_id_generate = random.randint(1, 100)
     country_id_generate = ['ID', 'FR', 'RU', 'GR', 'CN', 'NP', 'PH', 'TH', 'PL', 'SK', 'AM', 'CU', 'PT', 'NG', 'SV', 'IR', 'AF', 'TZ', 'TL', 'UA', 'EE', 'CZ', 'EG', 'DO', 'VE', 'SE', 'HR', 'US', 'CO', 'PE', 'NL', 'JP', 'NZ', 'MG', 'VN', 'LK', 'SY', 'CA', 'CM']
+    
     diagnosis_generate = [
     "Essential hypertension", "Type 2 diabetes mellitus", "Hyperlipidemia", 
     "Gastroesophageal reflux disease", "Anxiety disorder", "Major depressive disorder", "Acute upper respiratory infection", "Back pain, unspecified", "Osteoarthritis", 
@@ -139,13 +139,28 @@ def insert_data():
     "Migraine, unspecified", "Irritable bowel syndrome", "Chronic kidney disease", "Atrial fibrillation", "Gout", "Iron deficiency anemia", 
     "Insomnia", "Sleep apnea", "Psoriasis", "Eczema", "Gastroenteritis", "Benign prostatic hyperplasia",
     "Essential hypertension", "Type 2 diabetes mellitus", "Hyperlipidemia", "Gastroesophageal reflux disease", "Anxiety disorder", "Major depressive disorder", 
-    "Acute upper respiratory infection", "Back pain, unspecified", "Osteoarthritis", "Asthma, unspecified"
-]
+    "Acute upper respiratory infection", "Back pain, unspecified", "Osteoarthritis", "Asthma, unspecified"]
+    
+    lab_tests = [
+    "Hemoglobin", "WBC Count", "Platelets", "RBC Count", "Hematocrit", "MCV", "MCH", "MCHC", "RDW", "Neutrophils",
+    "Lymphocytes", "Monocytes", "Eosinophils", "Basophils", "Sodium", "Potassium", "Chloride", "Bicarbonate", "BUN", "Creatinine",
+    "Glucose", "Calcium", "Total Protein", "Albumin", "Globulin", "Bilurubin Total", "Bilurubin Direct", "ALT", "AST", "ALP",
+    "GGT", "LDH", "Total Cholesterol", "Triglycerides", "HDL Cholesterol", "LDL Cholesterol", "VLDL Cholesterol", "HbA1c", "TSH", "Free T4",
+    "Free T3", "Total T4", "Total T3", "PSA Total", "PSA Free", "CEA", "CA 125", "CA 19-9", "AFP", "hCG Beta",
+    "Urinalysis", "Urine Culture", "Urine Protein", "Microalbumin", "Creatinine Clearance", "eGFR", "CRP", "ESR", "Rheumatoid Factor", "ANA",
+    "Amylase", "Lipase", "Troponin I", "Troponin T", "CK-MB", "Total CK", "BNP", "NT-proBNP", "Myoglobin", "D-Dimer",
+    "PT", "INR", "APTT", "Fibrinogen", "Ferritin", "Iron Total", "TIBC", "Transferrin", "Vitamin B12", "Folate",
+    "Vitamin D Total", "Calcium Ionized", "Magnesium", "Phosphorus", "Uric Acid", "Lactate", "Cortisol", "ACTH", "Aldosterone", "Renin",
+    "Insulin", "C-Peptide", "Growth Hormone", "Prolactin", "LH", "FSH", "Estradiol", "Progesterone", "Testosterone Total", "Testosterone Free",
+    "DHEA-S", "SHBG", "ASO Titer", "VDRL", "HIV Ag/Ab", "HBsAg", "Anti-HBs", "Anti-HCV", "Mono Spot", "Stool Culture",
+    "Occult Blood", "Ova & Parasites", "Blood Culture", "Sputum Culture", "Wound Culture", "Streptococcus A", "Flu A/B PCR", "COVID-19 PCR", "ABG", "Lithium Level"]
 
     while True:
-        admission_input(patient_id_generate, doctor_id_generate, payment_id_generate, medicine_id_generate, country_id_generate, f"{random.randint(1, 7)}/{random.randint(1, 29)}/2025", f"{random.randint(8, 12)}/{random.randint(1, 29)}/2025", random.choice(diagnosis_generate), random.randint(1, 5))
-        patients_input(patient_id_generate, first_name_generate, last_name_generate, f"{first_name_generate}@{random.choice(["gmail.com", "outlook.com", "yahoo.com"])}", random.randint(30, 78), f"{random.randint(1, 12)}/{random.randint(1, 29)}/{random.randint(1980, 2018)}", random.randint(3101010101, 9990000000), random.choice["Waiting", "In admission", "Released", "Cancelled"], random.uniform(35.0, 39.8))
+        time.sleep(random.randint(1, 20))
+        admission_input(patient_id_generate, random.randint(1, 16), payment_id_generate, random.randint(1, 100), random.choice(country_id_generate), f"{random.randint(1, 7)}/{random.randint(1, 29)}/2025", f"{random.randint(8, 12)}/{random.randint(1, 29)}/2025", random.choice(diagnosis_generate), random.randint(1, 5))
+        patients_input(patient_id_generate, random.choice(first_name_generate), random.choice(last_name_generate), f"{random.choice(first_name_generate)}@{random.choice(["gmail.com", "outlook.com", "yahoo.com"])}", random.randint(30, 78), f"{random.randint(1, 12)}/{random.randint(1, 29)}/{random.randint(1980, 2018)}", random.randint(3101010101, 9990000000), random.choice(["Waiting", "In admission", "Released", "Cancelled"]), random.uniform(35.0, 39.8), lab_tests)
         payment_input(payment_id_generate, random.randint(50, 900), random.choice(["Onsite payment", "Online payment"]), f"{random.randint(8, 12)}/{random.randint(1, 29)}/2025")
+        patient_id_generate += 1
+        payment_id_generate += 1
 
-if __name__ == "__main__":
-    insert_data()
+insert_data()
