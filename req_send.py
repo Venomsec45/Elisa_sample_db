@@ -7,7 +7,7 @@ from datetime import datetime
 def admission_input(patient_id: int, doctor_id: int, payment_id: int, medicine_id: int, country_id: str, 
               admission_date: str, release_date: str, diagnosis: str, urgency_rate: int):
     
-    u = "http://127.0.0.1:8000/admission"
+    u = "http://127.0.0.1:8000/admission/insert"
     r = requests.post(url=u, params={"patient_id": patient_id, "doctor_id": doctor_id, "payment_id": payment_id, "medicine_id": medicine_id, "country_id": country_id, "admission_date": admission_date, "release_date": release_date, "diagnosis": diagnosis, "urgency_rate": urgency_rate})
     if r.status_code in (200, 201, 202, 204):
         show(f"[{datetime.now().strftime("%m/%d/%Y_%H-%M-%S")} [green]{r.status_code}[/green]] - {r.text}")
@@ -18,7 +18,7 @@ def admission_input(patient_id: int, doctor_id: int, payment_id: int, medicine_i
 def patients_input(patient_id: int, first_name: str, last_name: str, email: str, age: int, 
              birthday: str, contact_number: int, status: str, temperature: float, laboratory_test: str):
     
-    u = "http://127.0.0.1:8000/patients"
+    u = "http://127.0.0.1:8000/patients/insert"
     r = requests.post(url=u, params={"patient_id": patient_id, "first_name": first_name, "last_name": last_name, "email": email, "age": age, "birthday": birthday, "contact_number": contact_number, "status": status, "temperature": temperature, "laboratory_test": laboratory_test})
     if r.status_code in (200, 201, 202, 204):
         show(f"[{datetime.now().strftime("%m/%d/%Y_%H-%M-%S")} [green]{r.status_code}[/green]] - {r.text}")
@@ -28,7 +28,7 @@ def patients_input(patient_id: int, first_name: str, last_name: str, email: str,
 
 def payment_input(payment_id: int, amount: int, payment_method: str, paid_date: str):
     
-    u = "http://127.0.0.1:8000/payment"
+    u = "http://127.0.0.1:8000/payment/insert"
     r = requests.post(url=u, params={"payment_id": payment_id, "amount": amount, "payment_method": payment_method, "paid_date": paid_date})
     if r.status_code in (200, 201, 202, 204):
         show(f"[{datetime.now().strftime("%m/%d/%Y_%H-%M-%S")} [green]{r.status_code}[/green]] - {r.text}")
