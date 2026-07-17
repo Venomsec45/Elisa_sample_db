@@ -57,7 +57,7 @@ def doctors():
         return {"error": f"---->{e}<----"}
 
 # Post requests
-@app.post("/admission")
+@app.post("/admission/insert")
 def admission(patient_id: int, doctor_id: int, payment_id: int, medicine_id: int, country_id: str, admission_date: str, release_date: str, diagnosis: str, urgency_rate: int):
     try:
         cursor = db.cursor() 
@@ -72,7 +72,7 @@ def admission(patient_id: int, doctor_id: int, payment_id: int, medicine_id: int
     except Exception as e:
         return {"error": f"---->{e}<----"}
 
-@app.post("/patients")
+@app.post("/patients/insert")
 def patients(patient_id: int, first_name: str, last_name: str, email: str, age: int, birthday: str, contact_number: int, status: str, temperature: float, laboratory_test: str):
     try:
         cursor = db.cursor() 
@@ -86,7 +86,7 @@ def patients(patient_id: int, first_name: str, last_name: str, email: str, age: 
     except Exception as e:
         return {"error": f"---->{e}<----"}
 
-@app.post("/payment")
+@app.post("/payment/insert")
 def payment(payment_id: int, amount: int, payment_method: str, paid_date: str):
     try:
         cursor = db.cursor() 
@@ -101,7 +101,7 @@ def payment(payment_id: int, amount: int, payment_method: str, paid_date: str):
         return {"error": f"---->{e}<----"}
 
 # Update requests
-@app.put("/patient/{patient_id}")
+@app.put("/patient/change/{patient_id}")
 def update_patient(patient_id: int, first_name: str = Body(...), last_name: str = Body(...), age: int = Body(...), email: str = Body(...)):
     try:
         cursor = db.cursor() 
@@ -125,6 +125,41 @@ def doctor_remove(doctor_id: int):
         cursor.close()
         db.commit()
         return {"message": f"Doctor with the doctor {doctor_id} has been removed"}
+    
+    except Exception as e:
+        return {"error": f"----> {e} <----"}
+    
+@app.get("/payment_9283847AseNs")
+def payments_from_patients(patient_id: int):
+    try:
+        cursor = db.cursor(dictionary=True) 
+        query = "SELECT * FROM admissions WHERE patient_id = %s"
+        data = (patient_id, )
+        cursor.execute(query, data)
+        payment_data = cursor.fetchall()
+        if payment_data:
+            return payment_data["payment_id"]
+        
+        return {"message": "There are no doctors"}
+    
+    except Exception as e:
+        return {"error": f"---->{e}<----"}
+    
+@app.delete("/patients/remove/{patient_id}")
+def patient_remove(patient_id: int):
+    try:
+        cursor = db.cursor()
+        pay_id = payments_from_patients(patient_id)
+        query_1 = "DELETE FROM payments WHERE payment_id = %s" 
+        data = (pay_id, )
+        cursor.execute(query_1, data)
+        query_2 = "DELETE FROM patients WHERE patient_id = %s; DELETE FROM admissions WHERE patient_id = %s;"
+        for _ in cursor.execute(query_2, (patient_id, patient_id), multi=True):
+            pass
+
+        cursor.close()
+        db.commit()
+        return {"message": f"Doctor with the doctor {patient_id} has been removed"}
     
     except Exception as e:
         return {"error": f"----> {e} <----"}
