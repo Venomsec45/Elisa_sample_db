@@ -1,17 +1,10 @@
 from fastapi import FastAPI, Body
 import mysql.connector
-# import argparse
-# import uvicorn
+import requests
 
-# def commands():
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument("--host", required=True)
-#     parser.add_argument("--username", required=True)
-#     parser.add_argument("--return {"error": f"---->{e}<----"}word", required=True)
-#     parser.add_argument("--database", required=True)
-#     return parser
-
-# args = commands().parse_args()
+# REMINDER
+# The following codes below will be separated into modules after few days
+# for cleanliness and organization
 
 db = mysql.connector.connect(
     host="localhost",
@@ -22,9 +15,6 @@ db = mysql.connector.connect(
 
 app = FastAPI()
 
-# For fetching data
- # To make the database save changes
-
 # get requests
 @app.get("/patients/fetch")
 def patients():
@@ -34,7 +24,7 @@ def patients():
         cursor.execute(query)
         patient_data = cursor.fetchall()
         if patient_data:
-            return patient_data
+            return int(patient_data[-1]["patient_id"])
         
         return {"message": "There are no patients"}
     
@@ -129,16 +119,15 @@ def doctor_remove(doctor_id: int):
     except Exception as e:
         return {"error": f"----> {e} <----"}
     
-@app.get("/payment_9283847AseNs")
+@app.get("/payment_9283847AseNs/{patient_id}")
 def payments_from_patients(patient_id: int):
     try:
         cursor = db.cursor(dictionary=True) 
         query = "SELECT * FROM admissions WHERE patient_id = %s"
-        data = (patient_id, )
-        cursor.execute(query, data)
+        cursor.execute(query, (patient_id, ))
         payment_data = cursor.fetchall()
         if payment_data:
-            return payment_data["payment_id"]
+            return payment_data[0]["payment_id"]
         
         return {"message": "There are no doctors"}
     
@@ -149,17 +138,17 @@ def payments_from_patients(patient_id: int):
 def patient_remove(patient_id: int):
     try:
         cursor = db.cursor()
-        pay_id = payments_from_patients(patient_id)
-        query_1 = "DELETE FROM payments WHERE payment_id = %s" 
-        data = (pay_id, )
-        cursor.execute(query_1, data)
-        query_2 = "DELETE FROM patients WHERE patient_id = %s; DELETE FROM admissions WHERE patient_id = %s;"
-        for _ in cursor.execute(query_2, (patient_id, patient_id), multi=True):
-            pass
+        pay_id = requests.get(url=f"http://127.0.0.1:8000/payment_9283847AseNs/{patient_id}")
+        query_1 = "DELETE FROM payment WHERE payment_id = %s" 
+        cursor.execute(query_1, (int(pay_id.text), ))
+        query_2 = "DELETE FROM patients WHERE patient_id = %s"
+        query_3 = "DELETE FROM admissions WHERE patient_id = %s;"
+        for each_query in [query_2, query_3]:
+            cursor.execute(each_query, (patient_id, ))
 
         cursor.close()
         db.commit()
-        return {"message": f"Doctor with the doctor {patient_id} has been removed"}
+        return {"message": f"Patient with the patient id {patient_id} has been removed"}
     
     except Exception as e:
         return {"error": f"----> {e} <----"}
