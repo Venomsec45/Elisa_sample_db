@@ -16,7 +16,36 @@ db = mysql.connector.connect(
 app = FastAPI()
 
 # get requests
+@app.get("/home")
+def mainpage():
+    return {"message": "Welcome to the homepage API, the other webpages can be seen below",
+            "Pages": [{"/patients/fetch": "Fetches all patient records",
+                       "/patients/total_num_fetch": "Fetches the number of patients",
+                       "/doctors/fetch": "Fetches all doctors records",
+                       "/payment_9283847AseNs/{patient_id}": "For searching the patient by using the patient id",
+                       "/admission/insert": "Insert all details of the patient",
+                       "/patients/insert": "Inserts the patient name",
+                       "/payment/insert": "Inserts the payment of the patient",
+                       "/patient/change/{patient_id}": "Changes the patient records",
+                       "/doctors/remove/{doctor_id}": "Removed a doctor",
+                       "/patient/remove/{patient_id}": "Removes a patient"}]
+                       }
+
 @app.get("/patients/fetch")
+def patients():
+    try:
+        cursor = db.cursor(dictionary=True)
+        query = "SELECT * FROM patients"
+        cursor.execute(query)
+        all_patient_data = cursor.fetchall()
+        if all_patient_data:
+            return all_patient_data
+        return {"message": "There are no patients"}
+    
+    except Exception as e:
+        return {"error": f"---->{e}<----"}
+    
+@app.get("/patients/total_num_fetch")
 def patients():
     try:
         cursor = db.cursor(dictionary=True) 
@@ -40,6 +69,21 @@ def doctors():
         doctor_data = cursor.fetchall()
         if doctor_data:
             return doctor_data
+        
+        return {"message": "There are no doctors"}
+    
+    except Exception as e:
+        return {"error": f"---->{e}<----"}
+    
+@app.get("/payment_9283847AseNs/{patient_id}")
+def payments_from_patients(patient_id: int):
+    try:
+        cursor = db.cursor(dictionary=True) 
+        query = "SELECT * FROM admissions WHERE patient_id = %s"
+        cursor.execute(query, (patient_id, ))
+        payment_data = cursor.fetchall()
+        if payment_data:
+            return payment_data[0]["payment_id"]
         
         return {"message": "There are no doctors"}
     
@@ -118,21 +162,6 @@ def doctor_remove(doctor_id: int):
     
     except Exception as e:
         return {"error": f"----> {e} <----"}
-    
-@app.get("/payment_9283847AseNs/{patient_id}")
-def payments_from_patients(patient_id: int):
-    try:
-        cursor = db.cursor(dictionary=True) 
-        query = "SELECT * FROM admissions WHERE patient_id = %s"
-        cursor.execute(query, (patient_id, ))
-        payment_data = cursor.fetchall()
-        if payment_data:
-            return payment_data[0]["payment_id"]
-        
-        return {"message": "There are no doctors"}
-    
-    except Exception as e:
-        return {"error": f"---->{e}<----"}
     
 @app.delete("/patients/remove/{patient_id}")
 def patient_remove(patient_id: int):
