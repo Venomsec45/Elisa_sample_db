@@ -4,10 +4,10 @@ import sys
 import time
 from rich import print as show
 from sample_datas.diagnosis import diagnosis_lists
-from sample_date.lab import lab_lists
-from sample_data.first_names import first_name
-from sample_data.last_names import last_name
-from sample_data.country_id import country_id_identification
+from sample_datas.lab import lab_lists
+from sample_datas.first_names import first_name
+from sample_datas.last_names import last_name
+from sample_datas.country_id import country_id_identification
 from datetime import datetime
 
 def admission_input(patient_id: int, doctor_id: int, payment_id: int, medicine_id: int, country_id: str, 
@@ -46,7 +46,7 @@ def payment_input(payment_id: int, amount: int, payment_method: str, paid_date: 
 def remove_patient():
     u1 = "http://127.0.0.1:8000/patients/total_num_fetch"
     r = requests.get(url=u1)
-    u2 = f"http://127.0.0.1:8000/patients/remove/{random.randint(1, r)}"
+    u2 = f"http://127.0.0.1:8000/patients/remove/{random.randint(1, int(r.text))}"
     r2 = requests.delete(url=u2)
     if r.status_code in (200, 201, 202, 204):
         show(f"[[blue]{datetime.now().strftime("%m/%d/%Y_%H-%M-%S")}[/blue] [green]{r2.status_code}[/green]] - [blue]{r2.text}[/blue]")
