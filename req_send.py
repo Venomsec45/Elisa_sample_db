@@ -44,7 +44,7 @@ def payment_input(payment_id: int, amount: int, payment_method: str, paid_date: 
 
 # For removing a patient
 def remove_patient():
-    u1 = "http://127.0.0.1:8000/patients/fetch"
+    u1 = "http://127.0.0.1:8000/patients/total_num_fetch"
     r = requests.get(url=u1)
     u2 = f"http://127.0.0.1:8000/patients/remove/{random.randint(1, r)}"
     r2 = requests.delete(url=u2)
@@ -78,7 +78,7 @@ def insert_data():
             payment_id_generate += 1
             if random.randint(1, 500) == 58:
                 remove_patient()
-                
+
         except KeyboardInterrupt:
             show("\n[red]Script stopped...[/red]")
             sys.exit(2)
