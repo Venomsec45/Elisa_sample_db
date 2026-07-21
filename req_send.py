@@ -72,7 +72,7 @@ def insert_data():
         try:
             time.sleep(random.randint(1, 20))
             admission_input(patient_id_generate, random.randint(1, 16), payment_id_generate, random.randint(1, 100), random.choice(country_id_generate), f"{random.randint(1, 7)}/{random.randint(1, 29)}/2025", f"{random.randint(8, 12)}/{random.randint(1, 29)}/2025", random.choice(diagnosis_generate), random.randint(1, 5))
-            patients_input(patient_id_generate, random.choice(first_name_generate), random.choice(last_name_generate), f"{random.choice(first_name_generate)}@{random.choice(["gmail.com", "outlook.com", "yahoo.com"])}", random.randint(30, 78), f"{random.randint(1, 12)}/{random.randint(1, 29)}/{random.randint(1980, 2018)}", random.randint(3101010101, 9990000000), random.choice(["Waiting", "In admission", "Released", "Cancelled"]), random.uniform(35.0, 39.8), lab_tests)
+            patients_input(patient_id_generate, random.choice(first_name_generate), random.choice(last_name_generate), f"{random.choice(first_name_generate)}@{random.choice(["gmail.com", "outlook.com", "yahoo.com"])}", random.randint(30, 78), f"{random.randint(1, 12)}/{random.randint(1, 29)}/{random.randint(1980, 2018)}", random.randint(3101010101, 9990000000), random.choice(["Waiting", "In admission", "Released", "Cancelled"]), random.uniform(35.0, 39.8), random.choice(lab_tests))
             payment_input(payment_id_generate, random.randint(50, 900), random.choice(["Onsite payment", "Online payment"]), f"{random.randint(8, 12)}/{random.randint(1, 29)}/2025")
             patient_id_generate += 1
             payment_id_generate += 1
